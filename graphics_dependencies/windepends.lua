@@ -1,6 +1,6 @@
-configuration "WINDOWS"
+configuration "windows"
     if _ACTION ~= "clean" then
-          os.execute("windll.bat")
+          --os.execute("windll.bat")
     end
 
     if _ACTION == "clean" then

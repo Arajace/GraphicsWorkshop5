@@ -21,8 +21,9 @@ solution "GraphicsWorkshop5"
 
       -- what libraries need linking to
       configuration "windows"
+	 dofile("./graphics_dependencies/windepends.lua")
          links { "SDL2", "SDL2main", "opengl32", "glew32" }
-         dofile("./graphics_dependencies/windepends.lua")
+         
       configuration "linux"
          links { "SDL2", "SDL2main", "GL", "GLEW" }
       configuration {}
