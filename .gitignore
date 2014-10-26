@@ -12,6 +12,8 @@ Makefile
 ## Ignore CodeBlocks files - using premake
 *.cbp
 *.workspace
+*.depend
+*.layout
 
 ## Ignore Xcode 3 files - using premake
 *.xcodeproj
