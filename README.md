@@ -206,7 +206,11 @@ SDL_GL_SwapWindow(window);
 
 The **SDL_GL_SwapWindow** function prompts a window to update. We pass it the parameter **window**, which is the variable we made at the start.
 
-Make sure you still have the ```while (getchar() != '\n') {} ``` line to prevent the window from closing. Run your application now and you should hopefully see a triangle!
+Make sure you still have the ```while (getchar() != '\n') {} ``` line to prevent the window from closing. Run your application now and you should hopefully see a triangle!  
+
+---
+![alt text][FinishedTriangle]
+---
 
 Looping
 ---
@@ -277,3 +281,4 @@ Refer to the other workshop tasks to modify your code to do the following
 [SDL]:https://www.libsdl.org/
 [ScreenSpace1]:http://i.imgur.com/sut5WoQ.png "Default OpenGL screen space"
 [ScreenSpace2]:http://i.imgur.com/5dDESGZ.png "Where our triangle points lie relative in screen space"
+[FinishedTriangle]:http://i.imgur.com/kzy1bpm.png "The triangle output"
