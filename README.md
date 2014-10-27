@@ -119,7 +119,7 @@ Creating the shader program
 ---
 We've written our shader programs at the top of this file: ```GLchar* strVertexShader``` and ```strFragmentShader```. Now we need to tell the application to use them.
 
-We create the ***IDs*** for the shaders, then specify the data, and then compile them.
+We create the ***IDs*** for the shaders, then specify where the shader is stored, and then compile a shader program that uses them together.
 
 ```c
 GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
