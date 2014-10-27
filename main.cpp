@@ -72,11 +72,12 @@ int main(int argc, char* args[])
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-	// Compile shader program
+	// Compile vertex shader
 	GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
 	glShaderSource(vertexShader, 1, &strVertexShader, NULL);
 	glCompileShader(vertexShader);
 
+	// Compile fragment shader
 	GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
 	glShaderSource(fragmentShader, 1, &strFragmentShader, NULL);
 	glCompileShader(fragmentShader);
@@ -92,7 +93,7 @@ int main(int argc, char* args[])
 	glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &fragStatus);
 	std::cout << "Frag shader: " << fragStatus << std::endl;
 
-	// Attach our two shaders to a new shader program (say we want to use those shaders together)
+	// Attach our two shaders to a new shader program (i.e. say we want to use those shaders together)
 	GLuint shaderProgram = glCreateProgram();
 	glAttachShader(shaderProgram, vertexShader);
 	glAttachShader(shaderProgram, fragmentShader);
@@ -102,13 +103,13 @@ int main(int argc, char* args[])
 
 	// "Link" the program - up to this point, the two shaders can still be modified. This finialises them.
 	glLinkProgram(shaderProgram);
-	// All proceeding shader functions will use our shaderProgram
+	// All proceeding shader functions will use this shaderProgram
 	glUseProgram(shaderProgram);
 
 	std::cout << "Shader program created!" << std::endl;
 
 	/// Create the Vertex Array Object
-	// A VAO essentially 'points' to your VBO - if you have multiple VBOs, you can use a VAO to manage them
+	// A VAO essentially 'points' to your VBO - if you have multiple VBOs, you use a VAO to manage them
 	GLuint vao;
 	glGenVertexArrays(1, &vao);
 	glBindVertexArray(vao);
