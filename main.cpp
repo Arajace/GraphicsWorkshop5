@@ -23,37 +23,20 @@ const GLchar* strFragmentShader(
 	"}\n"
 	);
 
-int main(int argc, char* args[])
-{
+// Declare the variables we'll use
+SDL_Window* window;
+SDL_GLContext context;
+GLuint shaderProgram;
+GLint uniColor;
 
-	// Initialise SDL and exit the program if false
+// Declare our functions
+void InitialiseSDL();
+void CreateWindow(std::string windowTitle, int width, int height);
+void CreateBuffers();
+void CompileShaderProgram();
+void SetAttribsAndUniforms();
 
-	if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
-	{
-		return 1;
-	}
-	std::cout << "SDL Initialised!" << std::endl;
-
-
-	// Create a new window - Window Title, X and Y position on screen, Width and Height dimensions, and make it an SDL window
-	SDL_Window* window;
-	window = SDL_CreateWindow("Window Title", 100, 100, 600, 600, SDL_WINDOW_OPENGL);
-
-	// Make sure we tell it we're using OpenGL 3.3
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-
-	// Turn our window into an OpenGL window
-	SDL_GLContext context = SDL_GL_CreateContext(window);
-	std::cout << "SDL context initialised!" << std::endl;
-
-	// We use glewExperimental to call OpenGL 3 functions
-	glewExperimental = GL_TRUE;
-	if (glewInit() != GLEW_OK)
-		return 1;
-
-	// Create our square - two different triangles
+// We can have our vertices at the top so they are easily found
 	float vertices[] = {
 		-0.5f, -0.5f, // bottom left
 		0.5f, -0.5f, // bottom right
@@ -65,14 +48,92 @@ int main(int argc, char* args[])
 
 	};
 
+int main(int argc, char* args[])
+{
+	// Initialise SDL and exit the program if false
+	InitialiseSDL();
+
+	// Our window function lets us easily create a new window with specific dimensions without having to navigate through all the other code
+	CreateWindow("Window title", 600, 600);
 	
+	// Creates the VBO and VAO
+	CreateBuffers();
+
+	// If we change our shaders, we'll probably change the strings at the top - having this function lets have it out of the way
+	CompileShaderProgram();
+
+	// Set up our position and uniform stuff
+	SetAttribsAndUniforms();
+
+	/// TODO - Loop - start here!
+
+	// Update our triangles to be green
+	glUniform3f(uniColor, 0.0f, 1.0f, 0.0f);
+	
+	//Set the background to a deep purple
+	glClearColor(0.5f, 0.2f, 1.0f, 1.0f);
+	//Remove any existing colour data
+	glClear(GL_COLOR_BUFFER_BIT);
+
+	// Draw the traingles
+	glDrawArrays(GL_TRIANGLES, 0, 6);
+
+	// Updates the window
+	SDL_GL_SwapWindow(window);
+
+	/// TODO - Loop - end here!
+
+
+	while (getchar() != '\n') {}//Prevents application from closing without user input
+
+	return 0;
+}
+
+void InitialiseSDL()
+{
+	if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
+	{
+		exit(1);
+	}
+	std::cout << "SDL Initialised!" << std::endl;
+}
+
+void CreateWindow(std::string windowTitle, int width, int height)
+{
+	window = SDL_CreateWindow(windowTitle.c_str(), 100, 100, width, height, SDL_WINDOW_OPENGL);
+
+	// Make sure we tell it we're using OpenGL 3.3
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+
+	// Turn our window into an OpenGL window
+	context = SDL_GL_CreateContext(window);
+	std::cout << "SDL context initialised!" << std::endl;
+
+	// Use GLEW to access modern OpenGL functions
+	glewExperimental = GL_TRUE;
+	if (glewInit() != GLEW_OK)
+		exit(1);
+}
+
+void CreateBuffers()
+{
 	///Create a vertex buffer object
 	GLuint vbo;
 	glGenBuffers(1, &vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-	// Compile shader program
+	/// Create the Vertex Array Object
+	// A VAO essentially 'points' to your VBO - if you have multiple VBOs, you can use a VAO to manage them
+	GLuint vao;
+	glGenVertexArrays(1, &vao);
+	glBindVertexArray(vao);
+}
+
+void CompileShaderProgram()
+{
 	GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
 	glShaderSource(vertexShader, 1, &strVertexShader, NULL);
 	glCompileShader(vertexShader);
@@ -93,7 +154,7 @@ int main(int argc, char* args[])
 	std::cout << "Frag shader: " << fragStatus << std::endl;
 
 	// Attach our two shaders to a new shader program (say we want to use those shaders together)
-	GLuint shaderProgram = glCreateProgram();
+	shaderProgram = glCreateProgram();
 	glAttachShader(shaderProgram, vertexShader);
 	glAttachShader(shaderProgram, fragmentShader);
 	
@@ -104,15 +165,11 @@ int main(int argc, char* args[])
 	glLinkProgram(shaderProgram);
 	// All proceeding shader functions will use our shaderProgram
 	glUseProgram(shaderProgram);
-
 	std::cout << "Shader program created!" << std::endl;
+}
 
-	/// Create the Vertex Array Object
-	// A VAO essentially 'points' to your VBO - if you have multiple VBOs, you can use a VAO to manage them
-	GLuint vao;
-	glGenVertexArrays(1, &vao);
-	glBindVertexArray(vao);
-
+void SetAttribsAndUniforms()
+{
 	// Find where the 'position' variable is in our vertex shader
 	GLint posAttrib = glGetAttribLocation(shaderProgram, "position");
 	glEnableVertexAttribArray(posAttrib);
@@ -120,18 +177,7 @@ int main(int argc, char* args[])
 	glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 0, 0);
 
 	// Find where our uniform is in the fragment shader
-	GLint uniColor = glGetUniformLocation(shaderProgram, "uniColor");
+	uniColor = glGetUniformLocation(shaderProgram, "uniColor");
 	// Alter the values of the uniform - RGB - to make a green triangle
-	glUniform3f(uniColor, 0.0f, 1.0f, 0.0f);
-
-	// Draw everything our VAO points to - we're drawing triangles, GL_TRIANGLE, and we're using six vertices for our square
-	glDrawArrays(GL_TRIANGLES, 0, 6);
-
-	// Updates the window
-	SDL_GL_SwapWindow(window);
-
-
-	while (getchar() != '\n') {}//Prevents application from closing without user input
-
-	return 0;
+	
 }
