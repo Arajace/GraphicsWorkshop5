@@ -113,11 +113,11 @@ The ***glGenBuffers*** function takes in the number of buffers we are creating (
 
 ***glBindBuffer*** is used to specify which buffer we want to be 'active'. The first argument is the type of buffer it will be - a ```GL_ARRAY_BUFFER```, which means it will be used for vertices - and the ID of the buffer (the variable ```vbo```).
 
-The ***glBufferData*** function is used to send data to the currently active buffer (which we bound on the previous line). We specify that the buffer is for vertex data (```GL_ARRAY_BUFFER```). We then state the *actual* size of the data we're going to send through using ***sizeof*** on our array - which will be 24 bytes, since a ```float``` is 4 bytes in this case and we are using sending 6. The third parameter is the array that we will be sending through (```vertices```), and the final parameter specifies the frequency we'll be changing the buffer data (for now we'll use ```GL_STATIC_DRAW``` - you can Google the alternatives).
+The ***glBufferData*** function is used to send data to the currently active buffer (which we bound on the previous line). We specify that the buffer is for vertex data (```GL_ARRAY_BUFFER```). We then state the *actual* size of the data we're going to send through using ***sizeof*** on our array - which will be 24 bytes, since a ```float``` is 4 bytes in this case and we are sending 6 of them (our three pairs). The third parameter is the array that we will be sending through (```vertices```), and the final parameter specifies the frequency at which we intend to change the buffer data (for now we'll use ```GL_STATIC_DRAW``` - you can Google the alternatives).
 
 Creating the shader program
 ---
-We've written our shader programs at the top of this file ```GLchar* strVertexShader``` and ```strFragmentShader```. Now we need to tell the application to use them.
+We've written our shader programs at the top of this file: ```GLchar* strVertexShader``` and ```strFragmentShader```. Now we need to tell the application to use them.
 
 We create the ***IDs*** for the shaders, then specify the data, and then compile them.
 
