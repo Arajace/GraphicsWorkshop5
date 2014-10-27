@@ -2,7 +2,7 @@ Graphics Workshop 5
 =========    
    
     
-This workshop will act as a recap session for the basics rendering process to ensure you have a thorough working knowledge before moving further on. We'll go through triangle rendering line by line and break each aspect down. If you already feel comfortable with this, you can try the extra tasks (PDF available on Blackboard): https://github.com/shearer12345/graphics/blob/master/lincolnWorkshop05.mdpp
+This workshop will act as a recap session for the basic rendering process to ensure you have a thorough working knowledge before moving further on. We'll go through triangle rendering line by line and break each aspect down. If you already feel comfortable with this, you can try the extra tasks (PDF available on Blackboard): https://github.com/shearer12345/graphics/blob/master/lincolnWorkshop05.mdpp
 
 To start, open Git Shell and clone this repository:
 ```c
